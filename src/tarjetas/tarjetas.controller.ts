@@ -13,12 +13,15 @@ import {
   UseInterceptors,
   BadRequestException,
   Logger,
+  ParseFilePipe,
+  FileTypeValidator,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TarjetasService } from './tarjetas.service';
 import { ImportarResumenDto } from './dto/importar-resumen.dto';
 import { GetUser, type UsuarioAutenticado } from '../auth/decorators/get-user.decorator';
+import type { Express } from 'express';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('tarjetas')
@@ -29,10 +32,15 @@ export class TarjetasController {
 
   @Post('parsear-pdf')
   @UseInterceptors(FileInterceptor('file'))
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  parsearPDF(@UploadedFile() file: any) {
+  parsearPDF(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: 'application/pdf' })],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
     this.logger.log(`Archivo recibido: ${file?.originalname}, tamaño: ${file?.size} bytes`);
-    if (!file) throw new BadRequestException('Se requiere un archivo PDF');
     return this.tarjetasService.parsearPDF(file.buffer);
   }
 
