@@ -34,7 +34,7 @@ export class TarjetaResumen {
   @Column({ type: 'date', nullable: true })
   cierreActual: string | null;
 
-  @Column({ type: 'jsonb' })
+  @Column({ type: 'json' })
   cuotasAVencer: { mes: string; total: number }[];
 
   @CreateDateColumn()
