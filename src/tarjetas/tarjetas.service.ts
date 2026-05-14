@@ -72,7 +72,6 @@ export class TarjetasService {
       const data = await pdfParseLib(fileBuffer);
       texto = data.text;
       this.logger.log(`PDF extraído, longitud texto: ${texto.length} caracteres`);
-      this.logger.log(`Primeros 500 chars: ${texto.substring(0, 500)}`);
     } catch (error) {
       this.logger.error('Error al leer el PDF con pdf-parse:', error);
       throw new InternalServerErrorException('No se pudo leer el archivo PDF');

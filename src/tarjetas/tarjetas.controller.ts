@@ -31,7 +31,11 @@ export class TarjetasController {
   constructor(private readonly tarjetasService: TarjetasService) {}
 
   @Post('parsear-pdf')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
+  )
   parsearPDF(
     @UploadedFile(
       new ParseFilePipe({

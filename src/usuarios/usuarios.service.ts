@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Usuario } from './usuario.entity';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { Rol } from '../auth/rol.enum';
 
 @Injectable()
 export class UsuariosService {
@@ -17,7 +18,11 @@ export class UsuariosService {
     if (existe) throw new ConflictException('El email ya está registrado');
 
     const hash = await bcrypt.hash(dto.password, 10);
-    const usuario = this.usuariosRepository.create({ ...dto, password: hash });
+    const usuario = this.usuariosRepository.create({
+      ...dto,
+      password: hash,
+      rol: Rol.USUARIO,
+    });
     const guardado = await this.usuariosRepository.save(usuario);
 
     const { password, ...resultado } = guardado;

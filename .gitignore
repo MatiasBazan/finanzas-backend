@@ -6,6 +6,7 @@
 # Logs
 logs
 *.log
+.pm2
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
@@ -41,6 +42,8 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 .env.local
+.env.migration
+.env.backup
 
 # temp directory
 .temp
